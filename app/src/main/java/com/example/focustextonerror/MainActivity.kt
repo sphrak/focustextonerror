@@ -45,17 +45,17 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                     Column(
                         modifier = Modifier
-                            .padding(innerPadding)
                             .consumeWindowInsets(innerPadding)
-                            .imePadding()
+                            .padding(innerPadding)
                             .statusBarsPadding()
                             .navigationBarsPadding()
+                            .imePadding()
                             .verticalScroll(rememberScrollState())
                     ) {
-                        repeat(10) { index ->
+                        repeat(16) { index ->
                             Greeting(
                                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
-                                initialText = "cell $index"
+                                initialText = "placeholder $index"
                             )
                         }
                     }
@@ -75,9 +75,13 @@ fun Greeting(modifier: Modifier = Modifier, initialText: String) {
         mutableStateOf(state.text.any { char -> char in illegalChars })
     }
 
+    val interactionSource = remember { MutableInteractionSource() }
+
     BasicTextField(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth(),
         state = state,
+        interactionSource = interactionSource,
         decorator = {
             TextFieldDefaults.DecorationBox(
                 value = state.text.toString(),
@@ -85,7 +89,7 @@ fun Greeting(modifier: Modifier = Modifier, initialText: String) {
                 enabled = true,
                 singleLine = true,
                 visualTransformation = VisualTransformation.None,
-                interactionSource = remember { MutableInteractionSource() },
+                interactionSource = interactionSource,
                 isError = isError,
                 label = {
                     Text("label")
@@ -99,9 +103,7 @@ fun Greeting(modifier: Modifier = Modifier, initialText: String) {
                             color = Color.Red
                         )
                     }
-                } else null,
-                shape = TextFieldDefaults.shape,
-                colors = TextFieldDefaults.colors()
+                } else null
             )
         }
     )
